@@ -44,6 +44,9 @@ const char* password = "";
 
 const char* host = "api.pro.coinbase.com";
 
+// Allocate JsonBuffer
+const size_t capacity = JSON_OBJECT_SIZE(7) + 252;
+DynamicJsonBuffer jsonBuffer(capacity);
 
 void scrollText(char *p)
 {
@@ -90,6 +93,8 @@ JsonObject& getObject(String url) {
     if (!client.connect(host, 443)) {
         scrollText("Connection failed!");
         Serial.println("connection failed");
+        // No further work should be done if the connection failed
+        return jsonBuffer.parseObject(client);
     }
     Serial.println(F("Connected!"));
 
@@ -118,10 +123,6 @@ JsonObject& getObject(String url) {
       Serial.println(F("Invalid response"));
       scrollText("Invalid Response");
     }
-   
-  // Allocate JsonBuffer
-   const size_t capacity = JSON_OBJECT_SIZE(7) + 252;
-   DynamicJsonBuffer jsonBuffer(capacity);
     
     // Parse JSON object
     JsonObject& root = jsonBuffer.parseObject(client);
