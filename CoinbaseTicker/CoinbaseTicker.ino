@@ -137,37 +137,24 @@ JsonObject& getObject(String url) {
     return root;
 }
 
-String cryptoURL [] {
+String cryptoURL[] {
   "/products/BTC-USD/ticker",
   "/products/ETH-USD/ticker",
   "/products/LTC-USD/ticker", 
   "/products/BCH-USD/ticker", 
-  "/products/ETC-USD/ticker",
+  "/products/ETC-USD/ticker"
+};
+
+String cryptoName[] {
+  "BTC $",
+  "ETH $",
+  "LTC $",
+  "BCH $",
+  "ETC $"
 };
 
 void getCryptoPrices() {
-
-      for (int index = 0; index < 5; index++) {
-        String currentCrypto;
-        switch (index) {
-            case 0:
-                currentCrypto = "BTC $";
-                break;
-            case 1:
-                currentCrypto = "ETH $";
-                break;
-            case 2:
-                currentCrypto = "LTC $";
-                break;
-            case 3:
-                currentCrypto = "BCH $";
-                break;
-            case 4:
-                currentCrypto = "ETC $";
-                break;
-            default:
-                break;
-        }
+   for (int index = 0; index < 5; index++) {
         JsonObject& root = getObject(cryptoURL[index]);
         Serial.println("==========");
         Serial.println(F("Response:"));
@@ -178,13 +165,13 @@ void getCryptoPrices() {
         float cryptoPrice = root["price"].as<float>();
         Serial.println(cryptoPrice);
         Serial.println("==========");
-       String output = currentCrypto + String(cryptoPrice);
-       Serial.println(output);
-       
-       char *cstr = new char[output.length() + 1];
-       strcpy(cstr, output.c_str());
-       scrollText(cstr);
-       delete [] cstr; 
+        String output = cryptoName[index] + String(cryptoPrice);
+        Serial.println(output);
+        
+        char *cstr = new char[output.length() + 1];
+        strcpy(cstr, output.c_str());
+        scrollText(cstr);
+        delete [] cstr;
     }
 }
 
