@@ -4,7 +4,7 @@ Display Crypto Prices from Coinbase including BTC, ETH, LTC, BCH and ETC
 
 ## Requirements
 - NodeMCU ESP8266
-- MD_MAX72XX
+- MAX7219 Dot Matrix Module
 
 ## Demo
 
