@@ -20,7 +20,7 @@ Display Crypto Prices from Coinbase including BTC, ETH, LTC, BCH and ETC
 </p>
 
 ## Update 
-Modify the following array with your coin balances to display your portfolio. 
+Modify the following array with your coin balances to display your portfolio.
 
 ```c
 float coinBalance[] {
@@ -31,6 +31,7 @@ float coinBalance[] {
   0.0 // ETC
 };
 ```
+If you don't want to display your portfolio, download this ino file [here](https://github.com/LemaMichael/Ticker/files/2613270/CoinbaseTicker-No-Portfolio.ino.zip)
 
 ## Get Started
 - Enter your SSID and password of the Wi-Fi network in the [ino file](https://github.com/LemaMichael/Ticker/blob/ec17c1491a1fecc3da36ab58bc1a7bdb270c2c04/CoinbaseTicker/CoinbaseTicker.ino#L42-L43)
