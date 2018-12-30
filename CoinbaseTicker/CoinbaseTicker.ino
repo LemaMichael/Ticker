@@ -43,6 +43,8 @@ const char* ssid = "";
 const char* password = "";
 
 const char* host = "api.pro.coinbase.com";
+const char* fingerprint = "9C B0 72 05 A4 F9 D7 4E 5A A4 06 5E DD 1F 1C 27 5D C2 F1 48";
+
 
 // Allocate JsonBuffer
 const size_t capacity = JSON_OBJECT_SIZE(7) + 252;
@@ -81,57 +83,57 @@ void connectToWIFI() {
     Serial.println("");
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-    
+    Serial.println(WiFi.localIP());    
 }
 
 JsonObject& getObject(String url) {
 
-    // Connect to HTTP server 
+    // Use WiFiClientSecure class to create TLS connection
     WiFiClientSecure client;
     client.setTimeout(10000);
+    Serial.print("connecting to ");
+    Serial.println(host);
+    Serial.printf("Using fingerprint '%s'\n", fingerprint);
+    client.setFingerprint(fingerprint);
     if (!client.connect(host, 443)) {
-        scrollText("Connection failed!");
         Serial.println("connection failed");
+        scrollText("Connection failed!");
         // No further work should be done if the connection failed
         return jsonBuffer.parseObject(client);
     }
     Serial.println(F("Connected!"));
 
     // Send HTTP Request
-    client.println((String("GET ") + url + " HTTP/1.1"));
-    client.println("Host: api.pro.coinbase.com");
-    client.println("User-Agent: BuildFailureDetectorESP8266");
-    client.println("Connection: close");
-    if (client.println() == 0) {
-      Serial.println(F("Failed to send request"));
-      scrollText("Failed to send request");
-    }
-
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" +
+               "User-Agent: BuildFailureDetectorESP8266\r\n" +
+               "Connection: close\r\n\r\n");
+    Serial.println("request sent");
+    
     // Check HTTP Status
     char status[32] = {0};
     client.readBytesUntil('\r', status, sizeof(status));
     if (strcmp(status, "HTTP/1.1 200 OK") != 0) {
       Serial.print(F("Unexpected response: "));
       Serial.println(status);
-      scrollText(status);
+      return jsonBuffer.parseObject(client);
     }
 
     // Skip HTTP headers
     char endOfHeaders[] = "\r\n\r\n";
     if (!client.find(endOfHeaders)) {
       Serial.println(F("Invalid response"));
-      scrollText("Invalid Response");
+      //scrollText("Invalid Response");
     }
     
     // Parse JSON object
     JsonObject& root = jsonBuffer.parseObject(client);
     if (!root.success()) {
         Serial.println(F("Parsing failed!"));
-        scrollText("JSON Parse Failed!");
+        //scrollText("JSON Parse Failed!");
     }
     
-    // Disconnet
+    // Disconnect
     client.stop();
     jsonBuffer.clear();
     return root;
@@ -179,7 +181,7 @@ void getCryptoPrices() {
 
 void setup() {
   mx.begin();
-  Serial.begin(9600);
+  Serial.begin(115200);
   connectToWIFI();
 }
 
