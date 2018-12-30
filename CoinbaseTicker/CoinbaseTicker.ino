@@ -153,16 +153,7 @@ String cryptoName[] {
   "ETC $"
 };
 
-float coinBalance[] {
-  0.0, // BTC
-  0.0, // ETH
-  0.0, // LTC
-  0.0, // BCH
-  0.0 // ETC
-};
-
 void getCryptoPrices() {
-   float totalBalance = 0.0;
    for (int index = 0; index < 5; index++) {
         JsonObject& root = getObject(cryptoURL[index]);
         Serial.println("==========");
@@ -182,15 +173,7 @@ void getCryptoPrices() {
         scrollText(cstr);
         delete [] cstr;
 
-        totalBalance += coinBalance[index] * cryptoPrice;
     }
-
-    // Portfolio 
-    String output =  "$" + String(totalBalance);
-    char *cstr = new char[output.length() + 1];
-    strcpy(cstr, output.c_str());
-    scrollText(cstr);
-    delete [] cstr;
 }
 
 
