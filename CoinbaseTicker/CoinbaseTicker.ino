@@ -26,7 +26,7 @@
 // NOTE: These pin numbers will probably not work with your hardware and may
 // need to be adapted
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
-#define MAX_DEVICES 4
+#define MAX_DEVICES 8
 
 #define CLK_PIN   D5 // or SCK
 #define DATA_PIN  D7 // or MOSI
@@ -116,6 +116,7 @@ JsonObject& getObject(String url) {
     if (strcmp(status, "HTTP/1.1 200 OK") != 0) {
       Serial.print(F("Unexpected response: "));
       Serial.println(status);
+      //client.stop();
       return jsonBuffer.parseObject(client);
     }
 
