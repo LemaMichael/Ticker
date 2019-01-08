@@ -65,7 +65,7 @@ void scrollText(char *p)
       mx.transform(MD_MAX72XX::TSL);
       if (i < charWidth)
         mx.setColumn(0, cBuf[i]);
-        delay(DELAYTIME);
+      delay(DELAYTIME);
     }
   }
 }
@@ -175,7 +175,6 @@ void getCryptoPrices() {
         strcpy(cstr, output.c_str());
         scrollText(cstr);
         delete [] cstr;
-
     }
 }
 
